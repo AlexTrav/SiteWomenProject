@@ -15,7 +15,8 @@ urlpatterns = [
     path('archive/<year4:year>/', views.archive, name='archive'),
 
     # path('post/<int:post_id>', views.show_post, name='post'),
-    path('post/<slug:post_slug>/', views.show_post, name='post'),
+    # path('post/<slug:post_slug>/', views.show_post, name='post'),
+    path('post/<slug:post_slug>/', views.ShowPost.as_view(), name='post'),
 
     # path('addpage/', views.addpage, name='add_page'),
 
@@ -24,7 +25,11 @@ urlpatterns = [
     path('login/', views.login, name='login'),
 
     # path('category/<int:cat_id>/', views.show_category, name='category'),
-    path('category/<slug:cat_slug>/', views.show_category, name='category'),
-    path('tag/<slug:tag_slug>/', views.show_tag_postlist, name='tag'),
+
+    # path('category/<slug:cat_slug>/', views.show_category, name='category'),
+    path('category/<slug:cat_slug>/', views.WomenCategory.as_view(), name='category'),
+
+    # path('tag/<slug:tag_slug>/', views.show_tag_postlist, name='tag'),
+    path('tag/<slug:tag_slug>/', views.WomenTags.as_view(), name='tag'),
 ]
 

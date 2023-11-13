@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseNotFound  # , Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 # from django.urls import reverse
 # from django.template.loader import render_to_string
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, FormView
 
 from .forms import *
 
@@ -188,31 +189,44 @@ class ShowPost(DetailView):
 #     return render(request, 'women/addpage.html', context=context)
 
 
-class AddPage(View):
-    """Класс представления для отображения страницы добавления поста."""
+# class AddPage(View):
+#     """Класс представления для отображения страницы добавления поста. Наследованный от View."""
+#
+#     @staticmethod
+#     def get(request):
+#         form = AddPostForm()
+#         context = {
+#             'title': 'Добавление статьи',
+#             'menu': menu,
+#             'form': form,
+#         }
+#         return render(request, 'women/addpage.html', context=context)
+#
+#     @staticmethod
+#     def post(request):
+#         form = AddPostForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             # Метод save только у класса формы связанной с моделью -> Сохраняет переданные данные в таблицу (модель)
+#             form.save()
+#             return redirect('home')
+#         context = {
+#             'title': 'Добавление статьи',
+#             'menu': menu,            'form': form,
+#         }
+#         return render(request, 'women/addpage.html', context=context)
 
-    @staticmethod
-    def get(request):
-        form = AddPostForm()
-        context = {
-            'title': 'Добавление статьи',
-            'menu': menu,
-            'form': form,
-        }
-        return render(request, 'women/addpage.html', context=context)
 
-    @staticmethod
-    def post(request):
-        form = AddPostForm(request.POST, request.FILES)
-        if form.is_valid():
-            # Метод save только у класса формы связанной с моделью -> Сохраняет переданные данные в таблицу (модель)
-            form.save()
-            return redirect('home')
-        context = {
-            'title': 'Добавление статьи',
-            'menu': menu,            'form': form,
-        }
-        return render(request, 'women/addpage.html', context=context)
+class AddPage(FormView):
+    """Класс представления для отображения страницы добавления поста. Наследованный от FormView."""
+    form_class = AddPostForm
+    template_name = 'women/addpage.html'
+    success_url = reverse_lazy('home')
+    extra_context = {'title': 'Добавление статьи', 'menu': menu}
+
+    def form_valid(self, form):
+        form.save()
+        print(type(form.cleaned_data))
+        return super().form_valid(form)
 
 
 def contact(request):

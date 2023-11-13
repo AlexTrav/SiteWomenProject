@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseNotFound  # , Http404, HttpRes
 # from django.urls import reverse
 # from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-from django.views import View
+# from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, FormView
 
 from .forms import *

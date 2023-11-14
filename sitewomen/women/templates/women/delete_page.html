@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+    <p>Вы уверены, что хотите удалить "{{ post }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input class="form-button" type="submit" value="Подтвердить">
+    </form>
+    <a class="a" href="{% url 'post' post_slug=object.slug %}"><input class="form-button" type="submit" value="Отмена"></a>
+{% endblock %}

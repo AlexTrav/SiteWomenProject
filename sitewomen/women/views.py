@@ -3,8 +3,8 @@ from django.http import HttpResponse, HttpResponseNotFound  # , Http404, HttpRes
 # from django.urls import reverse
 # from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-# from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, FormView
+from django.views import View
+from django.views.generic import TemplateView, ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
 
 from .forms import *
 
@@ -83,56 +83,72 @@ class WomenHome(ListView):
 #             destination.write(chunk)
 
 
-def about(request):
-    # if request.method == 'POST':
-    #     # handle_uploaded_file(request.FILES['file_upload'])
-    #     form = UploadFileForm(request.POST, request.FILES)
-    #     if form.is_valid():
-    #         # Если без модели
-    #         # handle_uploaded_file(form.cleaned_data['file'])
-    #         # handle_uploaded_file(form.cleaned_data['photo'])
-    #
-    #         # Если с моделью
-    #         fp = UploadFiles(file=form.cleaned_data['file'])
-    #         fp.save()
-    # else:
-    #     form = UploadFileForm()
-    context = {
-        'title': 'О сайте',
-        'menu': menu,
-        # 'form': form,
-    }
-    return render(request, 'women/about.html', context=context)
+# def about(request):
+#     # if request.method == 'POST':
+#     #     # handle_uploaded_file(request.FILES['file_upload'])
+#     #     form = UploadFileForm(request.POST, request.FILES)
+#     #     if form.is_valid():
+#     #         # Если без модели
+#     #         # handle_uploaded_file(form.cleaned_data['file'])
+#     #         # handle_uploaded_file(form.cleaned_data['photo'])
+#     #
+#     #         # Если с моделью
+#     #         fp = UploadFiles(file=form.cleaned_data['file'])
+#     #         fp.save()
+#     # else:
+#     #     form = UploadFileForm()
+#     context = {
+#         'title': 'О сайте',
+#         'menu': menu,
+#         # 'form': form,
+#     }
+#     return render(request, 'women/about.html', context=context)
 
 
-def categories(request, category_id):
-    return HttpResponse(f'<h1>Категория | id:{category_id}</h1>')
+class WomenAbout(TemplateView):
+    template_name = 'women/about.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'О сайте'
+        context['menu'] = menu
+        return context
+
+# def categories(request, category_id):
+#     return HttpResponse(f'<h1>Категория | id:{category_id}</h1>')
 
 
-def categories_by_slug(request, category_slug):
-    return HttpResponse(f'<h1>Категория | slug: {category_slug}</h1>')
+# def categories_by_slug(request, category_slug):
+#     return HttpResponse(f'<h1>Категория | slug: {category_slug}</h1>')
 
 
-def archive(request, year):
-    if year > 2023:
-        # raise Http404()
-
-        # return redirect('home')
-
-        # return redirect('categories_by_slug', 'music')
-
-        uri = reverse('categories_by_slug', args=('music', ))
-        return redirect(uri)
-
-        # return HttpResponseRedirect(uri)  # С кодом 302
-        # return HttpResponsePermanentRedirect(uri)  # С кодом 301
-
-    return HttpResponse(f'<h1>Архив по годам | год: {year}</h1>')
+# def archive(request, year):
+#     if year > 2023:
+#         # raise Http404()
+#
+#         # return redirect('home')
+#
+#         # return redirect('categories_by_slug', 'music')
+#
+#         uri = reverse('categories_by_slug', args=('music', ))
+#         return redirect(uri)
+#
+#         # return HttpResponseRedirect(uri)  # С кодом 302
+#         # return HttpResponsePermanentRedirect(uri)  # С кодом 301
+#
+#     return HttpResponse(f'<h1>Архив по годам | год: {year}</h1>')
 
 
 # Обработчик исключений запросов
-def page_not_found(request, exception):
-    return HttpResponseNotFound(f'<h1>Страница не найдена</h1>')
+# def page_not_found(request, exception):
+#     return HttpResponseNotFound(f'<h1>Страница не найдена</h1>')
+
+
+class PageNotFound(View):
+
+    @staticmethod
+    def get(request, exception):
+        return HttpResponseNotFound(f'<h1>Страница не найдена</h1>')
 
 
 # def show_post(request, post_slug):
@@ -216,21 +232,84 @@ class ShowPost(DetailView):
 #         return render(request, 'women/addpage.html', context=context)
 
 
-class AddPage(FormView):
-    """Класс представления для отображения страницы добавления поста. Наследованный от FormView."""
+# class AddPage(FormView):
+#     """Класс представления для отображения страницы добавления поста. Наследованный от FormView."""
+#     form_class = AddPostForm
+#     template_name = 'women/addpage.html'
+#     success_url = reverse_lazy('home')
+#     extra_context = {'title': 'Добавление статьи', 'menu': menu}
+#
+#     def form_valid(self, form):
+#         form.save()
+#         print(type(form.cleaned_data))
+#         return super().form_valid(form)
+
+
+class AddPage(CreateView):
+    """Класс представления для отображения страницы добавления поста. Наследованный от CreateView."""
     form_class = AddPostForm
+    # model = Women
+    # fields = '__all__'
+    template_name = 'women/addpage.html'
+    # success_url = reverse_lazy('home')
+    extra_context = {'title': 'Добавление статьи', 'menu': menu}
+
+
+class UpdatePage(UpdateView):
+    """Класс представления для отображения страницы редактирования поста. Наследованный от CreateView."""
+    model = Women
+    fields = '__all__'
     template_name = 'women/addpage.html'
     success_url = reverse_lazy('home')
-    extra_context = {'title': 'Добавление статьи', 'menu': menu}
+    extra_context = {'title': 'Редактирование статьи', 'menu': menu}
+
+
+class DeletePage(DeleteView):
+    model = Women
+    template_name = 'women/delete_page.html'  # Создайте свой шаблон для подтверждения удаления
+    success_url = reverse_lazy('home')  # URL, на который будет перенаправлен пользователь после удаления
+    context_object_name = 'post'
+
+    # Необходимо переопределить метод get_object, чтобы использовать slug вместо pk
+    def get_object(self, queryset=None):
+        return Women.objects.get(slug=self.kwargs['slug'])
+
+    # Необязательный метод для добавления дополнительной контекстной информации в шаблон
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Удаление статьи'
+        context['menu'] = menu
+        return context
+
+
+# def contact(request):
+#     return HttpResponse('Обратная связь')
+
+
+# class WomenContact(TemplateView):
+#     template_name = 'women/contact.html'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['title'] = 'Контакты'
+#         context['menu'] = menu
+#         return context
+
+
+class WomenContact(FormView):
+    template_name = 'women/contact.html'
+    form_class = ContactForm
+    success_url = reverse_lazy('home')
 
     def form_valid(self, form):
         form.save()
-        print(type(form.cleaned_data))
         return super().form_valid(form)
 
-
-def contact(request):
-    return HttpResponse('Обратная связь')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Контакты'
+        context['menu'] = menu
+        return context
 
 
 def login(request):

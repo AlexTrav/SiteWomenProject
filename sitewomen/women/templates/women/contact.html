@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <header>
+        <h1>{{ title }}</h1>
+    </header>
+    <section>
+        <h3>Свяжитесь с нами</h3>
+        <p>Если у вас есть вопросы, предложения или вы хотите поделиться своим мнением, не стесняйтесь связаться с нами.</p>
+    </section>
+    <section>
+        <h3>Информация для связи</h3>
+        <p>Email: <a href="mailto:info@example.com">info@example.com</a></p>
+        <p>Телефон: +1 (555) 123-4567</p>
+    </section>
+    <section>
+        <h3>Адрес</h3>
+        <p>Наш офис расположен по адресу:</p>
+        <address>
+            1234 Улица Вымышленная, Город, Страна
+        </address>
+    </section>
+    <section>
+        <h3>Форма обратной связи</h3>
+        <form method="post" action="{% url 'contact' %}">
+            {% csrf_token %}
+            <div class="form-error">{{ form.non_field_errors }}</div>
+            {% for f in form %}
+                <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
+                <div class="form-error">{{ f.errors }}</div>
+            {% endfor %}
+            <p><button class="form-button" type="submit">Отправить</button></p>
+        </form>
+    </section>
+    <footer>
+        <p>Благодарим вас за ваш интерес и обратную связь!</p>
+    </footer>
+{% endblock %}
+

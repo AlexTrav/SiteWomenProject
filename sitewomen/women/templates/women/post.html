@@ -18,5 +18,10 @@
     {% if post.photo %}
         <p><img class="img-article-left" src="{{ post.photo.url }}"></p>
     {% endif %}
-    {{ post.content | linebreaks }}
+    <p>{{ post.content | linebreaks }}</p>
+    <!-- if admin ? -->
+    <a href="{% url 'edit_page' slug=post.slug %}"><input class="form-button" type="button" value="Редактировать"></a>
+    <a href="{% url 'delete_page' slug=post.slug %}"><input class="form-button" type="button" value="Удалить"></a>
+
+
 {% endblock %}

@@ -33,7 +33,7 @@ class Women(models.Model):
     tags = models.ManyToManyField('TagPost', blank=True, related_name='tags', verbose_name='Теги')
     husband = models.OneToOneField('Husband', on_delete=models.SET_NULL, null=True, blank=True, related_name='husband', verbose_name='Муж')
 
-    objects = models.Manager()
+    objects = models
     published = PublishedManager()
 
     class Meta:
@@ -101,3 +101,17 @@ class Husband(models.Model):
 # class UploadFiles(models.Model):
 #     """Модель загрузки файла"""
 #     file = models.FileField(upload_to='uploads_model')
+
+
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Имя')
+    email = models.EmailField(verbose_name='Почта')
+    message = models.TextField(verbose_name='Сообщение')
+    timestamp = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+
+    class Meta:
+        verbose_name = 'Сообщения пользователей'
+        verbose_name_plural = 'Сообщений пользователей'
+
+    def __str__(self):
+        return f"{self.name} - {self.email}"

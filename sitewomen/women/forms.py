@@ -106,3 +106,15 @@ class AddPostForm(forms.ModelForm):
 #     # Чисто для фото
 #     # photo = forms.ImageField(label='Фото')
 
+
+class ContactForm(forms.ModelForm):
+
+    class Meta:
+        model = ContactMessage
+        fields = ['name', 'email', 'message']
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-input'}),
+            'email': forms.TextInput(attrs={'class': 'form-input'}),
+            'message': forms.Textarea(attrs={'cols': 50, 'rows': 5}),
+        }

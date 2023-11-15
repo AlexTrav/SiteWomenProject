@@ -266,15 +266,13 @@ class UpdatePage(UpdateView):
 
 class DeletePage(DeleteView):
     model = Women
-    template_name = 'women/delete_page.html'  # Создайте свой шаблон для подтверждения удаления
-    success_url = reverse_lazy('home')  # URL, на который будет перенаправлен пользователь после удаления
+    template_name = 'women/delete_page.html'
+    success_url = reverse_lazy('home')
     context_object_name = 'post'
 
-    # Необходимо переопределить метод get_object, чтобы использовать slug вместо pk
     def get_object(self, queryset=None):
         return Women.objects.get(slug=self.kwargs['slug'])
 
-    # Необязательный метод для добавления дополнительной контекстной информации в шаблон
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Удаление статьи'

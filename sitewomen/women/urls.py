@@ -8,8 +8,8 @@ urlpatterns = [
     # path('', views.index, name='home'),
     path('', views.WomenHome.as_view(), name='home'),
 
-    # path('about/', views.about, name='about'),
-    path('about/', views.WomenAbout.as_view(), name='about'),
+    path('about/', views.about, name='about'),
+    # path('about/', views.WomenAbout.as_view(), name='about'),
 
     # path('categories/<int:category_id>/', views.categories, name='categories'),
     # path('categories/<slug:category_slug>/', views.categories_by_slug, name='categories_by_slug'),

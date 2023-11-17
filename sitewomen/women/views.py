@@ -1,10 +1,10 @@
-from django.core.paginator import Paginator
+# from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, HttpResponseNotFound  # , Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import HttpResponse, HttpResponseNotFound, Http404  # , Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 # from django.urls import reverse
 # from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-from django.views import View
+# from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
 
 from .forms import *
@@ -12,7 +12,7 @@ from .forms import *
 from .models import *
 
 # import uuid
-from .utils import DataMixin
+from .utils import DataMixin, PaginatorFromWomen
 
 
 class WomenHome(DataMixin, ListView):
@@ -21,25 +21,25 @@ class WomenHome(DataMixin, ListView):
     context_object_name = 'posts'
     title_page = 'Главная страница'
     cat_selected = 0
+    paginator_class = PaginatorFromWomen
 
     def get_queryset(self):
         return Women.published.all().select_related('cat')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        page = self.request.GET.get('page', 1)
+        paginator = self.paginator_class(self.get_queryset(), self.paginate_by)
+        paginator.page(page)
+        return self.get_mixin_context(context)
 
-# class WomenAbout(DataMixin, TemplateView):
-#     template_name = 'women/about.html'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         return self.get_mixin_context(context, title='О нас')
 
+class WomenAbout(DataMixin, TemplateView):
+    template_name = 'women/about.html'
 
-def about(request):
-    contact_list = Women.published.all()
-    paginator = Paginator(contact_list, 3)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, 'women/about.html', context={'title': 'О сайте', 'page_obj': page_obj})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title='О нас')
 
 
 # Обработчик исключений запросов
@@ -112,7 +112,8 @@ class WomenCategory(DataMixin, ListView):
     model = Category
     template_name = 'women/index.html'
     context_object_name = 'posts'
-    allow_empty = False
+    allow_empty = True
+    paginator_class = PaginatorFromWomen
 
     def get_queryset(self):
         return Women.published.filter(cat__slug=self.kwargs['cat_slug']).select_related('cat')
@@ -120,6 +121,10 @@ class WomenCategory(DataMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cat = context['posts'][0].cat
+        page = self.request.GET.get('page', 1)
+        paginator = self.paginator_class(self.get_queryset(), self.paginate_by)
+        paginator.page(page)
+
         return self.get_mixin_context(context, title=f'Категория - {cat.name}', cat_selected=cat.pk)
 
 

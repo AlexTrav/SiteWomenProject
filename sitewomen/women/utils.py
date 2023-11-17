@@ -1,3 +1,5 @@
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 menu = [
     {'title': 'О сайте', 'url_name': 'about'},
     {'title': 'Добавить статью', 'url_name': 'add_page'},
@@ -10,6 +12,7 @@ class DataMixin:
     title_page = None
     cat_selected = None
     extra_context = {}
+    paginate_by = 1
 
     def __init__(self):
         if self.title_page:
@@ -32,3 +35,17 @@ class DataMixin:
         context['cat_selected'] = None
         context.update(kwargs)
         return context
+
+
+class PaginatorFromWomen(Paginator):
+
+    def validate_number(self, number):
+        try:
+            return super().validate_number(number)
+        except EmptyPage:
+            if int(number) > 1:
+                return self.num_pages
+            elif int(number) < 1:
+                return 1
+            else:
+                raise

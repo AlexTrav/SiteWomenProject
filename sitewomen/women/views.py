@@ -104,8 +104,8 @@ class WomenContact(DataMixin, FormView):
         return self.get_mixin_context(context, title='Контакты')
 
 
-def login(request):
-    return HttpResponse('Авторизация')
+# def login(request):
+#     return HttpResponse('Авторизация')
 
 
 class WomenCategory(DataMixin, ListView):

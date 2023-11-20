@@ -3,7 +3,7 @@ from django.db.models import Count
 
 from women import views
 from women.models import *
-
+from women.utils import menu
 
 register = template.Library()
 
@@ -19,3 +19,8 @@ def show_categories(cat_selected=0):
 def show_all_tags():
     tags = TagPost.objects.annotate(total=Count('tags')).filter(total__gt=0)
     return {'tags': tags}
+
+
+# @register.simple_tag()
+# def get_menu():
+#     return menu

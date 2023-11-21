@@ -39,6 +39,7 @@ class WomenAbout(DataMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['cat_selected'] = None
         return self.get_mixin_context(context, title='О нас')
 
 
@@ -65,6 +66,7 @@ class AddPage(DataMixin, CreateView):
     form_class = AddPostForm
     template_name = 'women/addpage.html'
     title_page = 'Добавление статьи'
+    extra_context = {'cat_selected': None}
 
 
 class UpdatePage(DataMixin, UpdateView):
@@ -101,6 +103,7 @@ class WomenContact(DataMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['cat_selected'] = None
         return self.get_mixin_context(context, title='Контакты')
 
 

@@ -11,7 +11,6 @@
 </head>
 
 <body>
-
 	<table class="table-page" cellpadding="0" cellspacing="0">
 		<tr>
 			<td valign=top>
@@ -31,7 +30,7 @@
 							{% if user.is_authenticated %}
 								<li class="last">{{ user.username }} | <a href="{% url 'users:logout' %}">Выйти</a></li>
 							{% else %}
-								<li class="last"><a href="{% url 'users:login' %}">Войти</a> | <a href="#">Регистрация</a></li>
+								<li class="last"><a href="{% url 'users:login' %}">Войти</a> | <a href="{% url 'users:register' %}">Регистрация</a></li>
 							{% endif %}
 						</ul>
 						<div class="clear"></div>
@@ -85,6 +84,5 @@
 		</tr>
 	</table>
 	<!-- Конец footer'а и страницы -->
-
 </body>
 </html>

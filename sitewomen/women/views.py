@@ -1,4 +1,5 @@
 # from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseNotFound, Http404  # , Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 # from django.urls import reverse
@@ -61,12 +62,18 @@ class ShowPost(DataMixin, DetailView):
         return self.get_mixin_context(context, title=context['post'].title)
 
 
-class AddPage(DataMixin, CreateView):
+class AddPage(LoginRequiredMixin, DataMixin, CreateView):
     """Класс представления для отображения страницы добавления поста. Наследованный от CreateView."""
     form_class = AddPostForm
     template_name = 'women/addpage.html'
     title_page = 'Добавление статьи'
     extra_context = {'cat_selected': None}
+    # login_url = '/admin/'
+
+    def form_valid(self, form):
+        w = form.save(commit=False)
+        w.author = self.request.user
+        return super().form_valid(form)
 
 
 class UpdatePage(DataMixin, UpdateView):
@@ -84,12 +91,12 @@ class DeletePage(DataMixin, DeleteView):
     success_url = reverse_lazy('home')
     context_object_name = 'post'
 
-    def get_object(self, queryset=None):
-        return Women.objects.get(slug=self.kwargs['slug'])
+    # def get_object(self, queryset=None):
+    #     return Women.objects.get(slug=self.kwargs['slug'])
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return self.get_mixin_context(context, title='Удаление статьи')
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     return self.get_mixin_context(context, title='Удаление статьи')
 
 
 class WomenContact(DataMixin, FormView):

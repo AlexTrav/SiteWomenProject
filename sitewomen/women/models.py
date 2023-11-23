@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.db import models
 from django.urls import reverse
@@ -33,6 +34,8 @@ class Women(models.Model):
     tags = models.ManyToManyField('TagPost', blank=True, related_name='tags', verbose_name='Теги')
     husband = models.OneToOneField('Husband', on_delete=models.SET_NULL, null=True, blank=True, related_name='husband', verbose_name='Муж')
 
+    author = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, related_name='posts', null=True, default=None)
+
     objects = models
     published = PublishedManager()
 
@@ -49,7 +52,10 @@ class Women(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('post', kwargs={'post_slug': self.slug})
+        if self.is_published == self.Status.PUBLISHED:
+            return reverse('post', kwargs={'post_slug': self.slug})
+        else:
+            return reverse('home')
 
     def save(self, *args, **kwargs):
         if not self.slug:

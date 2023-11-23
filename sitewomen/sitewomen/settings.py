@@ -145,5 +145,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Либо так, либо get_success_url в class LoginUser(LoginView):
 LOGIN_REDIRECT_URL = 'home'
-
 LOGOUT_REDIRECT_URL = 'home'
+LOGIN_URL = 'users:login'

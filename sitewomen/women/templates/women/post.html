@@ -22,5 +22,12 @@
     {% if user.is_superuser or user == post.author %}
         <a href="{% url 'edit_page' slug=post.slug %}"><input class="form-button" type="button" value="Редактировать"></a>
         <a href="{% url 'delete_page' slug=post.slug %}"><input class="form-button" type="button" value="Удалить"></a>
+    {% else %}
+        {% if perms.women.change_women %}
+            <a href="{% url 'edit_page' slug=post.slug %}"><input class="form-button" type="button" value="Редактировать"></a>
+        {% endif %}
+        {% if perms.women.delete_women %}
+            <a href="{% url 'delete_page' slug=post.slug %}"><input class="form-button" type="button" value="Удалить"></a>
+        {% endif %}
     {% endif %}
 {% endblock %}

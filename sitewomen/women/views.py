@@ -1,5 +1,5 @@
 # from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseNotFound, Http404  # , Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 # from django.urls import reverse
@@ -62,13 +62,14 @@ class ShowPost(DataMixin, DetailView):
         return self.get_mixin_context(context, title=context['post'].title)
 
 
-class AddPage(LoginRequiredMixin, DataMixin, CreateView):
+class AddPage(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, CreateView):
     """Класс представления для отображения страницы добавления поста. Наследованный от CreateView."""
     form_class = AddPostForm
     template_name = 'women/addpage.html'
     title_page = 'Добавление статьи'
     extra_context = {'cat_selected': None}
     # login_url = '/admin/'
+    permission_required = 'women.add_women'
 
     def form_valid(self, form):
         w = form.save(commit=False)
@@ -76,13 +77,14 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView):
         return super().form_valid(form)
 
 
-class UpdatePage(DataMixin, UpdateView):
+class UpdatePage(PermissionRequiredMixin, DataMixin, UpdateView):
     """Класс представления для отображения страницы редактирования поста. Наследованный от CreateView."""
     model = Women
     fields = '__all__'
     template_name = 'women/addpage.html'
     success_url = reverse_lazy('home')
     title_page = 'Редактирование статьи'
+    permission_required = 'women.change_women'
 
 
 class DeletePage(DataMixin, DeleteView):

@@ -40,7 +40,7 @@ class RegisterUserForm(UserCreationForm):
 
 class ProfileUserForm(forms.ModelForm):
     username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'form-input'}), disabled=True)
-    email = forms.EmailField(label='Е-mail', widget=forms.EmailInput(attrs={'class': 'form-input'}), disabled=True)
+    email = forms.EmailField(label='Е-mail', required=False, widget=forms.EmailInput(attrs={'class': 'form-input'}), disabled=True)
     this_year = datetime.date.today().year
     date_birth = forms.DateField(widget=forms.SelectDateWidget(years=tuple(range(this_year - 100, this_year - 5))))
 

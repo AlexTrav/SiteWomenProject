@@ -15,12 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf.urls.static import static
-
-from sitewomen import settings
 from django.contrib import admin
 from django.urls import path, include
 
-from sitewomen.women import views
+from sitewomen import settings
+import women.views
 
 
 urlpatterns = [
@@ -34,7 +33,7 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-handler404 = views.page_not_found
+handler404 = women.views.page_not_found
 
 admin.site.site_header = 'Панель администрирования'
 admin.site.index_title = 'Известные женщины мира'

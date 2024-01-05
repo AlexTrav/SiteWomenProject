@@ -13,7 +13,7 @@ from .forms import *
 from .models import *
 
 # import uuid
-from .utils import DataMixin, PaginatorFromWomen
+from .utils import DataMixin, PaginatorFromWomen, CustomPermissionRequiredMixin
 
 
 class WomenHome(DataMixin, ListView):
@@ -62,7 +62,7 @@ class ShowPost(DataMixin, DetailView):
         return self.get_mixin_context(context, title=context['post'].title)
 
 
-class AddPage(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, CreateView):
+class AddPage(CustomPermissionRequiredMixin, LoginRequiredMixin, DataMixin, CreateView):
     """Класс представления для отображения страницы добавления поста. Наследованный от CreateView."""
     form_class = AddPostForm
     template_name = 'women/addpage.html'

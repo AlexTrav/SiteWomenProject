@@ -1,4 +1,7 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponseForbidden
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.shortcuts import render
 
 menu = [
     {'title': 'О сайте', 'url_name': 'about'},
@@ -44,3 +47,9 @@ class PaginatorFromWomen(Paginator):
                 return 1
             else:
                 raise
+
+
+class CustomPermissionRequiredMixin(PermissionRequiredMixin):
+
+    def handle_no_permission(self):
+        return render(self.request, 'women/forbidden.html', status=403, context={'title': 'Доступ запрещен', 'text': 'К сожалению у вас нет прав для выполнения этого действия.'})

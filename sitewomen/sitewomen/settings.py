@@ -89,9 +89,20 @@ WSGI_APPLICATION = 'sitewomen.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
+    # DEFAULT FOR SQLite
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+
+    # PostgreSQL
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': getenv('NAME'),
+        'USER': getenv('USER'),
+        'PASSWORD': getenv('PASSWORD'),
+        'HOST': getenv('HOST'),
+        'PORT': getenv('PORT'),
     }
 }
 

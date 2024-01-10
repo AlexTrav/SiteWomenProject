@@ -1,7 +1,8 @@
 # from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, HttpResponseNotFound, Http404  # , Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import HttpResponse, HttpResponseNotFound, Http404, \
+    JsonResponse  # , Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 # from django.urls import reverse
 # from django.template.loader import render_to_string
 from django.urls import reverse_lazy
@@ -101,7 +102,7 @@ class DeletePage(DataMixin, DeleteView):
     #     return self.get_mixin_context(context, title='Удаление статьи')
 
 
-class WomenContact(DataMixin, FormView):
+class ContactFormView(DataMixin, FormView):
     template_name = 'women/contact.html'
     form_class = ContactForm
     success_url = reverse_lazy('home')
@@ -116,8 +117,20 @@ class WomenContact(DataMixin, FormView):
         return self.get_mixin_context(context, title='Контакты')
 
 
-# def login(request):
-#     return HttpResponse('Авторизация')
+# class ContactFormView(LoginRequiredMixin, DataMixin, FormView):
+#     form_class = ContactForm
+#     template_name = 'women/contact.html'
+#     success_url = reverse_lazy('home')
+#     title_page = 'Обратная связь'
+#
+#     def form_valid(self, form):
+#         form.save()
+#         return super().form_valid(form)
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['cat_selected'] = None
+#         return self.get_mixin_context(context, title='Контакты')
 
 
 class WomenCategory(DataMixin, ListView):

@@ -1,5 +1,5 @@
 from django.urls import path, register_converter
-from women import views, converters
+from . import views, converters
 
 
 register_converter(converters.FourDigitYearConverter, 'year4')
@@ -9,7 +9,8 @@ urlpatterns = [
     path('about/', views.WomenAbout.as_view(), name='about'),
     path('post/<slug:post_slug>/', views.ShowPost.as_view(), name='post'),
     path('addpage/', views.AddPage.as_view(), name='add_page'),
-    path('contact/', views.WomenContact.as_view(), name='contact'),
+    # path('contact/', views.WomenContact.as_view(), name='contact'),
+    path('contact/', views.ContactFormView.as_view(), name='contact'),
     # path('login/', views.login, name='login'),
     path('category/<slug:cat_slug>/', views.WomenCategory.as_view(), name='category'),
     path('tag/<slug:tag_slug>/', views.WomenTags.as_view(), name='tag'),

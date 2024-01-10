@@ -44,10 +44,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
-    'women.apps.WomenConfig',
-    'users.apps.UsersConfig',
     'debug_toolbar',
     'social_django',
+    'captcha',
+    'users.apps.UsersConfig',
+    'women.apps.WomenConfig',
 ]
 
 MIDDLEWARE = [

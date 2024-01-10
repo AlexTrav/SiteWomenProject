@@ -5,6 +5,8 @@ from django.utils.deconstruct import deconstructible
 
 from .models import *
 
+from captcha.fields import CaptchaField
+
 
 # @deconstructible
 # class RussianValidator:
@@ -109,6 +111,8 @@ class AddPostForm(forms.ModelForm):
 
 class ContactForm(forms.ModelForm):
 
+    captcha = CaptchaField(label='Капча')
+
     class Meta:
         model = ContactMessage
         fields = ['name', 'email', 'message']
@@ -118,3 +122,10 @@ class ContactForm(forms.ModelForm):
             'email': forms.TextInput(attrs={'class': 'form-input'}),
             'message': forms.Textarea(attrs={'cols': 50, 'rows': 5}),
         }
+
+
+# class ContactForm(forms.Form):
+#     name = forms.CharField(label='Имя', max_length=50)
+#     email = forms.EmailField(label='Email')
+#     content = forms.CharField(label='Сообщение', widget=forms.Textarea(attrs={'cols': 60, 'rows': 10}))
+#     captcha = CaptchaField(label='Капча')

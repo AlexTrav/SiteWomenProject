@@ -1,11 +1,13 @@
 from django.urls import path, register_converter
 from . import views, converters
+from django.views.decorators.cache import cache_page
 
 
 register_converter(converters.FourDigitYearConverter, 'year4')
 
 urlpatterns = [
     path('', views.WomenHome.as_view(), name='home'),
+    # path('', cache_page(20)(views.WomenHome.as_view()), name='home'),  # -> Для кэширования отдельного представления
     path('about/', views.WomenAbout.as_view(), name='about'),
     path('post/<slug:post_slug>/', views.ShowPost.as_view(), name='post'),
     path('addpage/', views.AddPage.as_view(), name='add_page'),

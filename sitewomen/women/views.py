@@ -16,6 +16,9 @@ from .models import *
 # import uuid
 from .utils import DataMixin, PaginatorFromWomen, CustomPermissionRequiredMixin
 
+# <!-- Кэширование на уровне API -->
+# from django.core.cache import cache
+
 
 class WomenHome(DataMixin, ListView):
     model = Women
@@ -26,6 +29,11 @@ class WomenHome(DataMixin, ListView):
     paginator_class = PaginatorFromWomen
 
     def get_queryset(self):
+        # <!-- Кэширование на уровне API -->
+        # w_lst = cache.get('women_posts')
+        # if not w_lst:
+        #     w_lst = Women.published.all().select_related('cat')
+        #     cache.set('women_posts', w_lst, 20)
         return Women.published.all().select_related('cat')
 
     def get_context_data(self, **kwargs):
